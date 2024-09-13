@@ -15,12 +15,12 @@ def cats_index(req):
     return render(req, 'cats/index.html', {'cats': cats})
 def cats_detail(req, cat_id):
     cat = Cat.objects.get(id=cat_id)
-    toys = Toy.objects.all()
+    toys_cat_doesnt_have = Toy.objects.exclude(id__in = cat.toys.all().values_list('id'))
     feeding_form = FeedingForm()
     return render(req, 'cats/detail.html', {
         'cat': cat, 
         'feeding_form': feeding_form,
-        'toys': toys
+        'toys': toys_cat_doesnt_have
         })
 def add_feeding(req, cat_id):
     form = FeedingForm(req.POST)
@@ -32,6 +32,10 @@ def add_feeding(req, cat_id):
 
 def assoc_toy(req, cat_id, toy_id):
     Cat.objects.get(id=cat_id).toys.add(toy_id)
+    return redirect('cat_detail', cat_id=cat_id)
+
+def unassoc_toy(req, cat_id, toy_id):
+    Cat.objects.get(id=cat_id).toys.remove(toy_id)
     return redirect('cat_detail', cat_id=cat_id)
 
 class CatCreate(CreateView):
