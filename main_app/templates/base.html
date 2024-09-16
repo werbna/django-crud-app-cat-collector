@@ -25,11 +25,16 @@
       </div>
       <nav>
         <ul>
+          {% if user.is_authenticated %}
           <li><a href="{% url 'cats_index' %}">All Cats</a></li>
           <li><a href="{% url 'toy_index' %}">All Toys</a></li>
           <li><a href="{% url 'cat_create' %}">Add a Cat</a></li>
           <li><a href="{% url 'toy_create' %}">Add a Toy</a></li>
-          <li><a href="{% url 'about' %}">About</a></li>          
+          <li><a href="{% url 'about' %}">About</a></li>        
+          {% else %}
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'home' %}">Login</a></li>
+        {% endif %}
         </ul>
       </nav>
     </header>
